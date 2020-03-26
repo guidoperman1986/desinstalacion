@@ -1,0 +1,21 @@
+.advertencia{
+    color: red; 
+    text-transform: uppercase; 
+    font-weight: bold;
+    text-align: center;
+    font-family: 'Hammersmith One', sans-serif;
+}
+
+.titulo_row{
+    font-weight: bolder;
+}
+
+.estilo_canvas{
+    /* border: 1px solid blue; */
+    background-color: gray;
+}
+
+.estilo_form{
+    background-color: cadetblue;
+    border-radius: 5px;
+}
