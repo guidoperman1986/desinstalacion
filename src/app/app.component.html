@@ -4,7 +4,6 @@
     <div class="col-md-8 ml-auto mr-auto text-center">
       <h2 class="mt-2 advertencia"><img src="assets/logo.png" alt="" width="120" height="70">
       Solicitud de desinstalacion de Filtro</h2>
-      <hr>
       <span class="text-danger font-weight-bold">Todos los campos son requeridos</span>
         
     </div>
@@ -12,7 +11,7 @@
   
   <div class="container estilo_form" id="contentToConvert">
     <div class="row">
-      <div class="col-md-8 mt-3 ml-auto mr-auto mb-2">
+      <div class="col-md-8 mt-2 ml-auto mr-auto mb-2">
         
 
         <form [formGroup]="forma" (ngSubmit)="submitear()">
@@ -20,7 +19,7 @@
               <label class="col-form-label col-md-3 titulo_row">Nombre y apellido:</label>
               <div class="col-md-8">
                   <input class="form-control" placeholder="Minimo 6 Caracteres" formControlName="Nombre" type="text" name="" id="">
-              </div>
+              </div>              
           </div>
           <div class="form-group row">
               <label class="col-form-label col-md-3 titulo_row">Dirección:</label>
@@ -31,7 +30,7 @@
           <div class="form-group row">
               <label class="col-form-label col-md-3 titulo_row">Dirección de mail:</label>
               <div class="col-md-8">
-                  <input class="form-control" placeholder="" formControlName="Email" type="text" name="" id="">
+                  <input class="form-control" placeholder="ejemplo@ejemplo.com" formControlName="Email" type="text" name="" id="">
               </div>
           </div>
           <div class="form-group row">
@@ -57,13 +56,7 @@
               <div class="col-md-8">
                   <input class="form-control" formControlName="Dispositivo" type="text" name="" id="">
               </div>
-          </div>
-          <!-- <div class="form-group row">
-            <label class="col-form-label col-md-2 titulo_row">Aclaracion:</label>
-            <div class="col-md-8">
-                <input class="form-control" formControlName="Aclaracion" type="text" name="" id="">
-            </div>
-          </div> -->
+          </div>          
           <div class="form-group row">
             <div class="col-md-6">
               <label class="col-form-label titulo_row">Firma:</label>                
@@ -73,56 +66,34 @@
               </div>
               <div class="text-center mt-1">
                 <button class="btn btn-sm btn-outline-danger text-center" type="button" (click)="borrarFirma()">Borrar</button>
-              </div>
-              
-              
-            </div>
-            <div class="col-md-6">
-              <label class="col-form-label col-md-2 titulo_row">Aclaracion:</label>
-              <div class="col-md-10">
-                  <input class="form-control" formControlName="Aclaracion" type="text" name="" id="">
-              </div>
-            </div>
-
-
-
-
-
-
-
-            <!-- <div class="col-md-3">
-              <label class="col-form-label titulo_row">Firma:</label>
-              <div class="text-center estilo_canvas">
-                  <signature-pad [options]="signaturePadOptions" id="signatureCanvas"></signature-pad>            
-              </div>
-              
-              <div class="col-md-6 text-center mt-1">
-                <button class="btn btn-sm btn-outline-danger text-center" type="button" (click)="borrarFirma()">Borrar</button>    
               </div>              
-    
             </div>
-    
             <div class="col-md-6">
               <label class="col-form-label col-md-2 titulo_row">Aclaracion:</label>
-              <div class="col-md-8">
+              <div class="col-md-10 text-justify">
                   <input class="form-control" formControlName="Aclaracion" type="text" name="" id="">
+                  <span class="text-center advertencia">
+                    A partir del día de la fecha me hago responsable del contenido navegado y visualizado en el dispositivo arriba mencionado.
+                  </span>
               </div>
-            </div>    -->
-    
+            </div>
           </div>      
           
           <div class="row">
-            <span class="text-center advertencia">
+            <!-- <span class="text-center advertencia">
                 A partir del día de la fecha me hago responsable del contenido navegado y visualizado en el dispositivo arriba mencionado.
-            </span>
+            </span> -->
           </div>
       
           <div class="row">
             <div class="col-md-12 text-center">
-              <button type="submit" [disabled]="!forma.valid" class="btn btn-outline-dark">
+              <button *ngIf="forma.invalid" class="btn btn-outline-dark" (click)="formInvalido()">
                 Generar
               </button>
-      
+
+              <button type="submit" *ngIf="forma.valid" class="btn btn-outline-dark">
+                Generar
+              </button>      
             </div>
           </div>
     

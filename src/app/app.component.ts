@@ -58,6 +58,13 @@ export class AppComponent {
     this.signaturePad.clear();
   }
 
+  formInvalido(){
+    Swal.fire('Error','No completo todos los datos o el formato de algunos campos es incorrecto.','error')
+    this.signaturePad.clear()
+    this.forma.reset()
+    return;
+  }
+
   submitear(){
     
     if (this.signaturePad.isEmpty()){
@@ -74,30 +81,37 @@ export class AppComponent {
     
     console.log(data);
     console.log(firma); */
+    if (!this.forma.invalid){
+      var data = document.getElementById('contentToConvert');
+      html2canvas(data).then(canvas => {
+  
+          // Few necessary setting options
+          var imgWidth = 200;
+          var pageHeight = 10;
+          var imgHeight = canvas.height * imgWidth / canvas.width;
+          console.log(imgHeight);
+          /*console.log("Canvas height "+canvas.height); */
+          var heightLeft = imgHeight;
+  
+          const contentDataURL = canvas.toDataURL('image/png')
+  
+          let pdf = new jspdf('p', 'mm', 'A4'); // A4 size page of PDF          
+          var position = 10;
+          pdf.addImage(contentDataURL, 'image/jpg', 0, position, imgWidth, imgHeight);
+          pdf.save(`desinstalacion-${this.forma.value["Nombre"]}`); // Generated PDF
 
-    var data = document.getElementById('contentToConvert');
-    html2canvas(data).then(canvas => {
+          
+      }).then(()=>{
+        this.forma.reset()
+        this.signaturePad.clear()
+  
+        Swal.fire('Formulario generado','Envielo a <strong>info@tag-argentina.com.ar</strong> y procesaremos su solicitud.',"success")
+      })
 
-        // Few necessary setting options
-        var imgWidth = 200;
-        var pageHeight = 10;
-        var imgHeight = canvas.height * imgWidth / canvas.width;
-        console.log(imgHeight);
-        /*console.log("Canvas height "+canvas.height); */
-        var heightLeft = imgHeight;
 
-        const contentDataURL = canvas.toDataURL('image/png')
-
-        let pdf = new jspdf('p', 'mm', 'A4'); // A4 size page of PDF
-        var position = 10;
-        pdf.addImage(contentDataURL, 'image/png', 0, position, imgWidth, imgHeight);
-        pdf.save(`desinstalacion-${this.forma.value["Nombre"]}`); // Generated PDF
-    }).then(()=>{
+    }else{
       this.forma.reset()
-      this.signaturePad.clear()
-
-      Swal.fire('Formulario generado','Envielo a <strong>info@tag-argentina.com.ar</strong> y procesaremos su solicitud.',"success")
-    })
+    }
 
   }
   
