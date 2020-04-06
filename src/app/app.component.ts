@@ -31,14 +31,16 @@ export class AppComponent {
   ngOnInit() {
     this.forma = new FormGroup({
       'Nombre':      new FormControl('',[Validators.required, Validators.min(6)]),
-      'Dirección':   new FormControl('',[Validators.required, Validators.min(6)]),
-      'Email':       new FormControl('',[Validators.required, Validators.email]),
+      /* 'Dirección':   new FormControl('',[Validators.required, Validators.min(6)]), */
+      'Email':       new FormControl('',[Validators.required, Validators.email, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]),
       'Kehilá':      new FormControl('',[Validators.required, Validators.min(4)]),
       'Teléfono':    new FormControl('',[Validators.required]),
       'Celular':     new FormControl('',Validators.required),
       'Dispositivo': new FormControl('',Validators.required),
       'Aclaracion':  new FormControl('',Validators.required)
     })
+
+    
   }
 
   ngAfterViewInit() {
@@ -81,6 +83,7 @@ export class AppComponent {
     
     console.log(data);
     console.log(firma); */
+   
     if (!this.forma.invalid){
       var data = document.getElementById('contentToConvert');
       html2canvas(data).then(canvas => {
