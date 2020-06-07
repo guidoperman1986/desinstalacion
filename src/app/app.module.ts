@@ -7,11 +7,13 @@ import { AppComponent } from './app.component';
 
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PruebaComponent } from './components/prueba/prueba.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PruebaComponent
   ],
   imports: [
     BrowserModule,

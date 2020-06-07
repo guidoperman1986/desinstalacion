@@ -1,10 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { SignaturePad } from 'angular2-signaturepad/signature-pad';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+
+import { FormGroup, FormControl, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
 import Swal from 'sweetalert2'
-
+import SignaturePad from 'signature_pad';
 
 @Component({
   selector: 'app-root',
@@ -15,41 +15,64 @@ export class AppComponent {
   title = 'uninstallForm';
 
   forma:FormGroup;
+  @ViewChild('sPad', {static: true}) signaturePadElement;
+  signaturePad: any;
 
-  @ViewChild(SignaturePad, null) signaturePad: SignaturePad;
+  email       : AbstractControl;
+  nombre      : AbstractControl;
+  kehila      : AbstractControl;
+  telefono    : AbstractControl;
+  celular     : AbstractControl;
+  dispositivo : AbstractControl;
+  aclaracion  : AbstractControl;
+  
 
-  signaturePadOptions: Object = { // passed through to szimek/signature_pad constructor
-    'minWidth': 3,
-    'canvasWidth': 200,
-    'canvasHeight': 150
-  };
-
-  constructor() {
+  constructor(private fb:FormBuilder) {
     // no-op
   }
 
   ngOnInit() {
-    this.forma = new FormGroup({
-      'Nombre':      new FormControl('',[Validators.required, Validators.min(6)]),
-      /* 'Dirección':   new FormControl('',[Validators.required, Validators.min(6)]), */
-      'Email':       new FormControl('',[Validators.required, Validators.email, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]),
-      'Kehilá':      new FormControl('',[Validators.required, Validators.min(4)]),
-      'Teléfono':    new FormControl('',[Validators.required]),
-      'Celular':     new FormControl('',Validators.required),
-      'Dispositivo': new FormControl('',Validators.required),
-      'Aclaracion':  new FormControl('',Validators.required)
+    this.forma = this.fb.group/* new FormGroup */({
+      nombre      : new FormControl('',[Validators.required, Validators.minLength(6)]),      
+      email       : new FormControl('',
+                        [
+                          Validators.required, Validators.email, 
+                          Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+                        ]
+      ),
+      kehila      : new FormControl('',[Validators.required, Validators.minLength(4)]),
+      telefono    : new FormControl('',
+                        [
+                          Validators.required, 
+                          Validators.pattern(/^-?[0-9]\\d*(\\.\\d{1,2})?$/)
+                        ]
+      ),
+      celular     : new FormControl('',
+                        [
+                          Validators.required,
+                          Validators.pattern(/^-?[0-9]\\d*(\\.\\d{1,2})?$/)
+                        ]
+      ),
+      dispositivo : new FormControl('',Validators.required),
+      aclaracion  : new FormControl('',Validators.required)
     })
 
-    
+    this.email        = this.forma.controls.email;
+    this.nombre       = this.forma.controls.nombre;
+    this.kehila       = this.forma.controls.kehila;
+    this.telefono     = this.forma.controls.telefono;
+    this.celular      = this.forma.controls.celular;
+    this.dispositivo  = this.forma.controls.dispositivo;
+    this.aclaracion   = this.forma.controls.aclaracion;
+    /* console.log(this.telefono); */
   }
 
   ngAfterViewInit() {
-    this.signaturePad.set('minWidth', 5);
-    this.signaturePad.clear();    
+    this.signaturePad = new SignaturePad(this.signaturePadElement.nativeElement);    
   }
 
   drawComplete() {
-    console.log(this.signaturePad.toDataURL());
+   
   }
 
   drawStart() {
@@ -62,28 +85,12 @@ export class AppComponent {
 
   formInvalido(){
     Swal.fire('Error','No completo todos los datos o el formato de algunos campos es incorrecto.','error')
-    this.signaturePad.clear()
-    this.forma.reset()
-    return;
+    //this.signaturePad.clear()
+    //this.forma.reset()
+    //return;
   }
 
-  submitear(){
-    
-    if (this.signaturePad.isEmpty()){
-      return
-    }
-
-    /* let dataForm;
-
-    dataForm=this.forma.value;
-
-    //tomo la firma del canvas y la convierto en imagen y luego la paso a un array
-    this.signaturePad.fromDataURL("image/jpeg");
-    let firma = this.signaturePad.toData()
-    
-    console.log(data);
-    console.log(firma); */
-   
+  submitear(){   
     if (!this.forma.invalid){
       var data = document.getElementById('contentToConvert');
       html2canvas(data).then(canvas => {
@@ -110,12 +117,9 @@ export class AppComponent {
   
         Swal.fire('Formulario generado','Envielo a <strong>info@tag-argentina.com.ar</strong> y procesaremos su solicitud.',"success")
       })
-
-
     }else{
       this.forma.reset()
     }
-
   }
   
 

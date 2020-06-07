@@ -1,9 +1,10 @@
+<!-- <app-prueba class="mb-5"></app-prueba> -->
 <div>
-
   <div class="row">
     <div class="col-md-8 ml-auto mr-auto text-center">
       <h2 class="mt-2 advertencia"><img src="assets/logo.png" alt="" width="120" height="70">
-      Solicitud de desinstalacion de Filtro</h2>
+        Solicitud de desinstalacion de Filtro
+      </h2>
       <span class="text-danger font-weight-bold">Todos los campos son requeridos</span>
       <hr>
     </div>
@@ -18,7 +19,8 @@
           <div class="form-group row">
               <label class="col-form-label col-md-3 titulo_row">Nombre y apellido:</label>
               <div class="col-md-8">
-                  <input class="form-control" placeholder="Minimo 6 Caracteres" formControlName="Nombre" type="text" name="" id="">
+                  <input class="form-control" placeholder="Minimo 6 Caracteres" formControlName="nombre" type="text" name="" id="">
+                  <span *ngIf="nombre.touched && nombre.errors && nombre.errors.min != 6" class="ml-auto mr-auto text-danger font-weight-bold">Se necesitan 6 caracteres como minimo</span>
               </div>              
           </div>
           <!-- <div class="form-group row">
@@ -30,31 +32,35 @@
           <div class="form-group row">
               <label class="col-form-label col-md-3 titulo_row">Dirección de mail:</label>
               <div class="col-md-8">
-                  <input class="form-control" placeholder="ejemplo@ejemplo.com" formControlName="Email" type="text" name="" id="">
+                <input class="form-control" placeholder="ejemplo@ejemplo.com" formControlName="email" type="text" name="" id="">
+                <span *ngIf="email.touched && email.errors && email.errors.email" class="ml-auto mr-auto text-danger font-weight-bold">Ingrese un email con formato válido</span>
               </div>
           </div>
           <div class="form-group row">
               <label class="col-form-label col-md-3 titulo_row">Kehilá: </label>
               <div class="col-md-8">
-                  <input class="form-control" placeholder="Minimo 4 Caracteres" formControlName="Kehilá" type="text" name="" id="">
+                  <input class="form-control" placeholder="Minimo 4 Caracteres" formControlName="kehila" type="text" name="" id="">
+                  <span *ngIf="kehila.touched && kehila.errors && kehila.errors.min != 4" class="ml-auto mr-auto text-danger font-weight-bold">Se necesitan 4 caracteres como minimo</span>
               </div>
           </div>
           <div class="form-group row">
               <label class="col-form-label col-md-3 titulo_row">Teléfono fijo:</label>
               <div class="col-md-8">
-                  <input class="form-control" formControlName="Teléfono" type="text" name="" id="">
+                  <input class="form-control" formControlName="telefono" type="text" name="" id="">
+                  <span *ngIf="telefono.touched && telefono.errors" class="ml-auto mr-auto text-danger font-weight-bold">Se permiten solo numeros</span>
               </div>
           </div>
           <div class="form-group row">
               <label class="col-form-label col-md-3 titulo_row">Telefono celular:</label>
               <div class="col-md-8">
-                  <input class="form-control" formControlName="Celular" type="text" name="" id="">
+                  <input class="form-control" formControlName="celular" type="text" name="" id="">
+                  <span *ngIf="celular.touched && celular.errors" class="ml-auto mr-auto text-danger font-weight-bold">Se permiten solo numeros</span>
               </div>
           </div>
           <div class="form-group row">
               <label class="col-form-label col-md-3 titulo_row">Dispositivo:</label>
               <div class="col-md-8">
-                  <input class="form-control" formControlName="Dispositivo" type="text" name="" id="">
+                  <input class="form-control" formControlName="dispositivo" type="text" name="" id="">
               </div>
           </div>          
           <div class="form-group row">
@@ -62,7 +68,9 @@
               <label class="col-form-label titulo_row">Firma:</label>                
               
               <div class="text-center estilo_canvas">
-                <signature-pad [options]="signaturePadOptions" id="signatureCanvas"></signature-pad>            
+                <div class="signature-pad--body">
+                  <canvas #sPad width="150" height="130" style="touch-action: none;"></canvas>
+                </div>            
               <!-- </div>-->
                 <div class="text-center mt-1">
                   <button class="btn btn-sm btn-outline-danger text-center mb-0 mr-0" type="button" (click)="borrarFirma()">Borrar</button>
@@ -72,7 +80,7 @@
             <div class="col-md-6">
               <label class="col-form-label col-md-2 titulo_row">Aclaracion:</label>
               <div class="col-md-10 text-justify">
-                  <input class="form-control" formControlName="Aclaracion" type="text" name="" id="">
+                  <input class="form-control" formControlName="aclaracion" type="text" name="" id="">
                   <span class="text-center advertencia">
                     A partir del día de la fecha me hago responsable del contenido navegado y visualizado en el dispositivo arriba mencionado.
                   </span>
@@ -88,13 +96,9 @@
       
           <div class="row">
             <div class="col-md-12 text-center">
-              <button *ngIf="forma.invalid" class="btn btn-outline-dark" (click)="formInvalido()">
-                Generar
-              </button>
+              <button *ngIf="forma.invalid" class="btn btn-outline-dark" (click)="formInvalido()">Generar</button>
 
-              <button type="submit" *ngIf="forma.valid" class="btn btn-outline-dark">
-                Generar
-              </button>      
+              <button type="submit" *ngIf="forma.valid" class="btn btn-outline-dark">Generar</button>      
             </div>
           </div>
     
