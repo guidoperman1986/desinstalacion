@@ -1,21 +1,29 @@
+html, body {
+    /* font-family: 'Poppins', sans-serif; */
+}
+
 .advertencia{
     color: red; 
     text-transform: uppercase; 
     font-weight: bold;
     text-align: center;
-    font-family: 'Hammersmith One', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 .titulo_row{
     font-weight: bolder;
+    font-family: 'Poppins', sans-serif;
 }
 
 .estilo_canvas{
     /* border: 1px solid blue; */
     background-color: gray;
+    margin-left: 15px;
 }
 
 .estilo_form{
-    background-color: cadetblue;
+    background-color: rgb(182, 221, 223);
     border-radius: 5px;
+    width: 60%;
+    
 }

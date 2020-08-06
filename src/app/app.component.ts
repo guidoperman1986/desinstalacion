@@ -1,10 +1,12 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
 import { FormGroup, FormControl, Validators, FormBuilder, AbstractControl } from '@angular/forms';
-import * as jspdf from 'jspdf';
+import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import Swal from 'sweetalert2'
 import SignaturePad from 'signature_pad';
+
+import htmlToImage from 'html-to-image';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +19,8 @@ export class AppComponent {
   forma:FormGroup;
   @ViewChild('sPad', {static: true}) signaturePadElement;
   signaturePad: any;
+
+  @ViewChild('htmlData') htmlData:ElementRef;
 
   email       : AbstractControl;
   nombre      : AbstractControl;
@@ -32,7 +36,7 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    this.forma = this.fb.group/* new FormGroup */({
+    this.forma = this.fb.group({
       nombre      : new FormControl('',[Validators.required, Validators.minLength(6)]),      
       email       : new FormControl('',
                         [
@@ -44,13 +48,13 @@ export class AppComponent {
       telefono    : new FormControl('',
                         [
                           Validators.required, 
-                          Validators.pattern(/^-?[0-9]\\d*(\\.\\d{1,2})?$/)
+                          /* Validators.pattern(/^-?[0-9]\\d*(\\.\\d{1,2})?$/) */
                         ]
       ),
       celular     : new FormControl('',
                         [
                           Validators.required,
-                          Validators.pattern(/^-?[0-9]\\d*(\\.\\d{1,2})?$/)
+                          /* Validators.pattern(/^-?[0-9]\\d*(\\.\\d{1,2})?$/) */
                         ]
       ),
       dispositivo : new FormControl('',Validators.required),
@@ -90,7 +94,9 @@ export class AppComponent {
     //return;
   }
 
-  submitear(){   
+  submitear(){
+    console.log(this.forma);
+
     if (!this.forma.invalid){
       var data = document.getElementById('contentToConvert');
       html2canvas(data).then(canvas => {
@@ -105,7 +111,7 @@ export class AppComponent {
   
           const contentDataURL = canvas.toDataURL('image/png')
   
-          let pdf = new jspdf('p', 'mm', 'A4'); // A4 size page of PDF          
+          let pdf = new jsPDF('p', 'mm', 'A4'); // A4 size page of PDF          
           var position = 10;
           pdf.addImage(contentDataURL, 'image/jpg', 0, position, imgWidth, imgHeight);
           pdf.save(`desinstalacion-${this.forma.value["Nombre"]}`); // Generated PDF
@@ -122,8 +128,35 @@ export class AppComponent {
     }
   }
   
+  captureScreen() {
+    if (!this.forma.invalid && !this.signaturePad._isEmpty){
+      const filename = `desinstalacion-${this.forma.value["nombre"]}`;
+      const node = document.getElementById('contentToConvert');
+      htmlToImage.toPng(node)
+        .then( (dataUrl) => {
+          const img = new Image();
+          img.src = dataUrl;
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          pdf.setLineWidth(1);
 
+          pdf.addImage(img, 'PNG', 0, 0, 180, 290);
+          pdf.save(filename);
 
+          Swal.fire('Formulario generado','Envielo a <strong>info@tag-argentina.com.ar</strong> y procesaremos su solicitud.',"success")
+              .then(()=>{
+                this.forma.reset();
+                this.signaturePad.clear();
+              })
+      })
+      .catch((error) => {
+        console.error('oops, something went wrong!', error);
+      });
 
+      
+    }else{
+        Swal.fire('Error','No completo todos los datos o el formato de algunos campos es incorrecto.','error');
+    }
+
+  }
 
 }

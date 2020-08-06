@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 import { AppComponent } from './app.component';
 
@@ -18,7 +18,8 @@ import { PruebaComponent } from './components/prueba/prueba.component';
   imports: [
     BrowserModule,
     SignaturePadModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PdfViewerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
